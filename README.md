@@ -75,9 +75,14 @@ online recognition service. No project backend receives audio. Unsupported
 browsers retain text search and keyboard dictation. See
 [MDN SpeechRecognition](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition).
 
-The interface has keyboard navigation, labelled controls, a modal reader,
-reduced-motion support and a motion switch. Only motion preference is saved in
-local storage. No analytics, accounts, API keys, paid AI endpoints or database.
+The interface has keyboard navigation and labelled controls. Analysis opens in
+natural-height panels between cards and results, leaving the audio timeline
+available. The search row docks at the top while scrolling and keeps voice
+search and the Galaxy, Memories and Learning shortcuts together. The clearly
+labelled orbit control pauses or resumes moving planets and decorative motion;
+system reduced-motion settings are respected. Only the manual motion preference
+is saved in local storage. No analytics, accounts, API keys, paid AI endpoints
+or database.
 
 ## Reproduce content processing
 
@@ -113,7 +118,8 @@ files never enter the hosted artifact. All resource paths are relative for
 ## Credits and rights
 
 GFS Didot and Inter are served locally with their SIL Open Font License texts in
-`site/fonts/`. Planets, stars and motion are CSS, not external artwork.
+`site/fonts/`. Planet and star artwork is CSS; the orbital positions use a
+small client-side animation without external artwork.
 Public hosting does not grant a reuse license for the recording or speakers'
 voices. No cloned voice or invented testimony is used.
 

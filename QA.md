@@ -1,5 +1,8 @@
 # Verification record
 
+The initial-release measurements below describe the 24 September version.
+The inline-panel and orbital-motion update is recorded at the end of this file.
+
 Verified locally on 24 September 2026, Windows, installed Chrome with Playwright.
 This is a new project; no previous release existed for before/after comparison.
 
@@ -93,3 +96,33 @@ all owned browser processes exited. Public evidence is in
 `output/playwright/public/` and `work/public-deployment.json` locally. A final
 mobile-only planet-label spacing adjustment followed this full run; its rendered
 layout and served artifact are checked separately before task completion.
+
+## Inline panels and orbital navigation — 25 September 2026
+
+The user reported that the modal backdrop obscured the audio timeline. The old
+version was reproduced from commit `361a319` and captured before editing.
+The replacement reader mounts after the relevant grid row or search result,
+uses natural page height, and has visible close controls. Opening it pushes
+following content down. The native audio timeline stays hit-testable while a
+source excerpt plays, and playback continues if the panel is closed.
+
+The search, microphone and three section shortcuts occupy one row on desktop
+and 360 px mobile. That row docks at the top after scrolling past its home
+position. Typing while docked reveals live results. Its Galaxy, Memories and
+Learning shortcuts were each navigated. Planet buttons orbit around the sun;
+the labelled control freezes and resumes them. The system reduced-motion
+setting also keeps planets still.
+
+`node scripts/browser-qa.cjs` passed **54 local interaction checks** in Chrome,
+including the exact open → play → use timeline → close chain, source privacy
+regression, mobile/tablet overflow, and absence of page errors. All owned
+test-browser processes exited. The inspected comparison captures are stored at
+`output/playwright/interaction-comparison/` locally.
+
+A 2.2 s comparison on the same browser and desktop viewport measured
+`TaskDuration` of 250.32 ms before and 249.08 ms after the transform-based
+orbit implementation; the previously fixed planet moved 16.38 screen px.
+These are individual desktop measurements, not phone performance evidence or
+a claim of zero rendering cost. The final local run showed a 16.8 ms p95
+animation-frame interval on this 60 Hz headless browser. Physical-device and
+real-microphone limitations above still apply.

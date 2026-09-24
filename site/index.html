@@ -14,7 +14,7 @@
   <header class="header wrap">
     <a class="brand" href="#" aria-label="VOICE αρχική"><img src="./favicon.svg" width="36" height="36" alt=""><span>VOICE<span class="brand-dot">.</span></span></a>
     <nav aria-label="Κύρια πλοήγηση"><a href="#library">Ο γαλαξίας</a><a href="#memories">Αναμνήσεις</a><a href="#learned">Τι μάθαμε</a></nav>
-    <button id="motion" class="quiet-button" aria-pressed="false" title="Παύση κίνησης">◌ <span>Κίνηση</span></button>
+    <button id="motion" class="quiet-button" aria-pressed="false" aria-label="Παύση τροχιών" title="Παύση τροχιών"><span class="motion-icon" aria-hidden="true">Ⅱ</span> <span class="motion-copy">Τροχιές σε κίνηση</span></button>
   </header>
   <main>
     <section class="universe" aria-labelledby="hero-title">
@@ -30,8 +30,9 @@
         <div id="memory-stars"></div>
         <span class="galaxy-coordinate" aria-hidden="true">35° N · 33° E<br>MEMORY CONSTELLATION</span>
       </div>
-      <div class="search-area wrap">
+      <div id="search-home" class="search-home"><div class="search-area wrap">
         <div class="search-heading"><span class="mini-sun">✳</span> Όλα ξεκινούν με κάτι που θυμάσαι.</div>
+        <div class="search-row">
         <form id="search-form" role="search" class="search-box">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
           <label class="sr-only" for="search">Αναζήτηση σε θέματα, ιστορίες και απομαγνητοφώνηση</label>
@@ -39,9 +40,15 @@
           <span class="key-hint" aria-hidden="true">/</span>
           <button id="voice-search" type="button" aria-label="Φωνητική αναζήτηση"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4m-4 0h8"/></svg></button>
         </form>
+        <nav class="search-shortcuts" aria-label="Γρήγορη μετάβαση">
+          <a href="#galaxy" aria-label="Στον ζωντανό γαλαξία" title="Γαλαξίας"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="5.8" transform="rotate(-26 12 12)"/><circle cx="20" cy="8" r="1"/></svg></a>
+          <a href="#memories" aria-label="Στις αναμνήσεις" title="Αναμνήσεις"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 2.1 7.9L22 12l-7.9 2.1L12 22l-2.1-7.9L2 12l7.9-2.1L12 2Z"/><path d="m19 2 .5 2.5L22 5l-2.5.5L19 8l-.5-2.5L16 5l2.5-.5L19 2Z"/></svg></a>
+          <a href="#learned" aria-label="Στο Τι μάθαμε" title="Τι μάθαμε"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20c-3-2-6-2.5-9-2V4c3-.5 6 0 9 2 3-2 6-2.5 9-2v14c-3-.5-6 0-9 2Z"/><path d="M12 6v14"/></svg></a>
+        </nav>
+        </div>
         <div class="search-bottom"><span>Ψάξε σε κάθε λέξη της μεταγραφής και άκου το σημείο.</span><div id="suggestions"></div></div>
         <p id="voice-status" class="voice-status" role="status"></p>
-      </div>
+      </div></div>
     </section>
     <section id="results-section" class="wrap results-section" hidden aria-labelledby="results-title">
       <div class="section-heading"><div><div class="eyebrow">ΑΝΑΖΗΤΗΣΗ ΣΤΟ ΑΡΧΕΙΟ</div><h2 id="results-title">Ακολουθώντας τη σκέψη.</h2></div><button id="clear-search" class="quiet-button">Καθαρισμός ×</button></div>
@@ -77,7 +84,7 @@
     <label class="speed-label"><span class="sr-only">Ταχύτητα αναπαραγωγής</span><select id="speed"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
     <button id="stop-excerpt" class="quiet-button" hidden>Ολόκληρος ήχος</button>
   </aside>
-  <dialog id="reader"><div class="reader-head"><span class="eyebrow" id="reader-kind"></span><button id="close-reader" class="icon-button" aria-label="Κλείσιμο">×</button></div><div id="reader-content"></div></dialog>
+  <section id="reader" class="reader-panel" aria-labelledby="reader-title" hidden><div class="reader-head"><span class="eyebrow" id="reader-kind"></span><button id="close-reader" class="icon-button" aria-label="Κλείσιμο ανάλυσης">×</button></div><div id="reader-content"></div><button id="close-reader-bottom" class="outline-button reader-close-bottom">Κλείσιμο ανάλυσης ↑</button></section>
   <div id="toast" class="toast" role="status" hidden></div>
 </body>
 </html>
