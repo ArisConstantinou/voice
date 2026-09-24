@@ -1,0 +1,80 @@
+# Verification record
+
+Verified locally on 24 September 2026, Windows, installed Chrome with Playwright.
+This is a new project; no previous release existed for before/after comparison.
+
+## Automated checks
+
+`npm test` passes: 220 chronological public transcript entries (including the
+redaction notice), 8 topics, 3 memories, 12 lessons, valid source-time ranges,
+182,327 bytes of initial transcript plus editorial JSON, public audio hash,
+no public speech overlapping the removed interval, and silent waveform bins.
+
+`node scripts/browser-qa.cjs` passed **33 interaction checks**. It uses an existing
+Playwright runtime, configurable with `VOICE_PLAYWRIGHT_PACKAGE`; it does not
+require adding browser tooling to production dependencies. Use `VOICE_QA_URL`
+to check another deployment and `VOICE_QA_OUTPUT` for a separate evidence folder.
+
+Covered: content counts; deferred audio download; live source/code search;
+empty-result recovery; Greek case/accent normalization; category filters;
+source readers; Escape; authentic excerpt seeking and playback; excerpt stop;
+playback speed; transcript chapters and following audio; detailed lessons;
+source links; Greek synthesis invocation and cancellation; motion controls;
+private-interval skip; direct story links; unsupported microphone fallback;
+simulated permission denial and recognized voice input; uncaught errors.
+
+No uncaught page errors. All eight recorded test-browser processes exited after
+the run. Existing user browsers and other development servers were not stopped.
+
+## Responsive and visual checks
+
+Actual page captures inspected at 1440x1000, 820x1180, 390x844 and 360x800.
+No horizontal document overflow. The final mobile layout uses a single readable
+card column; the tablet layout stacks the hero, search and galaxy to avoid
+collisions. The modal reader fits the narrow viewport. Source stories and
+learning sections were also captured and inspected. Evidence is saved locally
+under `output/playwright/`, excluded from the published artifact.
+
+## Performance observations
+
+Representative local interaction run, Chrome headless, desktop viewport:
+
+- Initial navigation: **217 ms**.
+- Initial transferred resources: **367,953 bytes**, no audio requested.
+- Fill-to-live-result check: **222 ms**, including the 100 ms input debounce.
+- JS heap after initial rendering: approximately **3.9 MB**.
+- 120 requestAnimationFrame intervals with the galaxy visible: mean **4.17 ms**,
+  p95 **4.30 ms**, maximum **4.50 ms** on this host's high-refresh environment.
+
+These are single local observations, not mobile hardware benchmarks or promises
+for internet loading. CSS-only refinements were then checked at all four widths.
+The site has no framework runtime, external font request, background audio
+prefetch or real-time AI requests. Audio is 89,138,354 bytes and supports range
+requests. No physical iPhone/Safari performance measurement was made.
+
+## Privacy and source integrity
+
+The owner explicitly selected omission of the private telephone aside.
+The public derivative mutes **3410–3667 seconds** while retaining source timing.
+FFmpeg measured the interior of this interval at the signed-16-bit silence floor
+(mean and peak -91 dB); decoded waveform interior bins are all zero.
+The player skips the range even after a manual seek. Public transcript and VTT
+contain only an omission notice for that interval. Raw materials stay ignored.
+
+Public audio SHA-256:
+`5E9940076F3223DD3F6E85F8898C5E27FDC84BF33586995D90A0FA56A3EA0F91`.
+The original source hash was checked again and remained unchanged.
+
+## Explicit limits
+
+- Transcription is automatic, not a human-certified verbatim record.
+- 33 public entries are flagged uncertain. Nine small intervals could not be
+  reliably transcribed after the targeted second pass; their audio is available.
+- Microphone results and failures were simulated. End-to-end spoken recognition
+  on the user's device and vendor service was not verified.
+- Speech synthesis was tested for invocation and cancellation, not pronunciation;
+  this test Chrome environment did not offer an installed Greek voice.
+- Emulated mobile viewports do not establish physical iPhone/Safari support.
+- The source drawing and verified speaker identities were not provided.
+
+GitHub Actions and public deployment verification are recorded after publishing.

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101320">
+  <title>VOICE — Ένας γαλαξίας γνώσης</title>
+  <meta name="description" content="Μια πραγματική ηλεκτρολογική συζήτηση, ένας γαλαξίας γνώσης. Θεματικά μαθήματα, ιστορίες και αναζητήσιμη απομαγνητοφώνηση με τον αυθεντικό ήχο.">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#library">Στο περιεχόμενο</a>
+  <header class="header wrap">
+    <a class="brand" href="#" aria-label="VOICE αρχική"><img src="./favicon.svg" width="36" height="36" alt=""><span>VOICE<span class="brand-dot">.</span></span></a>
+    <nav aria-label="Κύρια πλοήγηση"><a href="#library">Ο γαλαξίας</a><a href="#memories">Αναμνήσεις</a><a href="#learned">Τι μάθαμε</a></nav>
+    <button id="motion" class="quiet-button" aria-pressed="false" title="Παύση κίνησης">◌ <span>Κίνηση</span></button>
+  </header>
+  <main>
+    <section class="universe" aria-labelledby="hero-title">
+      <div class="starfield" aria-hidden="true"></div>
+      <div class="hero-copy wrap"><div class="eyebrow"><span class="status-dot"></span> ΤΟ ΑΡΧΕΙΟ ΤΗΣ ΕΜΠΕΙΡΙΑΣ <span class="edition">VOL. 01 / ELECTRICAL</span></div>
+        <h1 id="hero-title">Κάθε φωνή,<br>ένας <em>κόσμος.</em></h1>
+        <p>Όσα ειπώθηκαν. Όσα αξίζει να θυμόμαστε.<br>Εξερεύνησε τη γνώση μέσα από μια πραγματική συζήτηση.</p>
+      </div>
+      <div class="galaxy" id="galaxy" aria-label="Θεματικός χάρτης της συζήτησης">
+        <div class="orbit orbit-one" aria-hidden="true"></div><div class="orbit orbit-two" aria-hidden="true"></div><div class="orbit orbit-three" aria-hidden="true"></div>
+        <button class="sun" data-action="focus-search" aria-label="Ο ήλιος της αναζήτησης — αναζήτησε σε όλο το αρχείο"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button>
+        <div id="planets"></div>
+        <div id="memory-stars"></div>
+        <span class="galaxy-coordinate" aria-hidden="true">35° N · 33° E<br>MEMORY CONSTELLATION</span>
+      </div>
+      <div class="search-area wrap">
+        <div class="search-heading"><span class="mini-sun">✳</span> Όλα ξεκινούν με κάτι που θυμάσαι.</div>
+        <form id="search-form" role="search" class="search-box">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
+          <label class="sr-only" for="search">Αναζήτηση σε θέματα, ιστορίες και απομαγνητοφώνηση</label>
+          <input id="search" type="search" placeholder="Μια λέξη, μια ιστορία, ένας κωδικός…" autocomplete="off" aria-controls="results">
+          <span class="key-hint" aria-hidden="true">/</span>
+          <button id="voice-search" type="button" aria-label="Φωνητική αναζήτηση"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4m-4 0h8"/></svg></button>
+        </form>
+        <div class="search-bottom"><span>Ψάξε σε κάθε λέξη της μεταγραφής και άκου το σημείο.</span><div id="suggestions"></div></div>
+        <p id="voice-status" class="voice-status" role="status"></p>
+      </div>
+    </section>
+    <section id="results-section" class="wrap results-section" hidden aria-labelledby="results-title">
+      <div class="section-heading"><div><div class="eyebrow">ΑΝΑΖΗΤΗΣΗ ΣΤΟ ΑΡΧΕΙΟ</div><h2 id="results-title">Ακολουθώντας τη σκέψη.</h2></div><button id="clear-search" class="quiet-button">Καθαρισμός ×</button></div>
+      <p id="result-count" role="status"></p><div id="results"></div><button id="more-results" class="outline-button" hidden>Περισσότερα αποτελέσματα</button>
+    </section>
+    <section id="library" class="wrap library-section" aria-labelledby="library-title">
+      <div class="section-heading"><div><div class="eyebrow">01 / ΟΙ ΚΟΣΜΟΙ ΤΗΣ ΣΥΖΗΤΗΣΗΣ</div><h2 id="library-title">Η γνώση έχει τροχιά.</h2></div><span class="section-note" id="archive-stats">Φόρτωση αρχείου…</span></div>
+      <div id="filters" class="filters" aria-label="Φίλτρα θεμάτων"></div>
+      <div id="topic-grid" class="topic-grid"></div>
+      <p class="source-note">Πηγή: Electrical.m4a · Η μεταγραφή είναι αυτόματη και μπορεί να περιέχει λάθη σε κυπριακές εκφράσεις, ονόματα και αριθμούς. Άκου την πηγή πριν βασιστείς σε μια ακριβή διατύπωση. Η ιδιωτική παρένθεση 56:50–1:01:07 έχει αφαιρεθεί από το δημόσιο κείμενο και έχει σιγήσει στον ήχο· ο player την προσπερνά αυτόματα. Οι χρόνοι της αρχικής ηχογράφησης διατηρούνται.</p>
+    </section>
+    <section id="memories" class="memories-section" aria-labelledby="memories-title"><div class="wrap">
+      <div class="section-heading"><div><div class="eyebrow">02 / Ο ΑΣΤΕΡΙΣΜΟΣ ΤΗΣ ΕΜΠΕΙΡΙΑΣ</div><h2 id="memories-title">Κάποιες ιστορίες<br><em>μένουν αναμμένες.</em></h2></div><p class="section-description">Περιστατικά, αναμνήσεις και μαθήματα από την πράξη. Με τα λόγια και την πραγματική φωνή της συζήτησης.</p></div>
+      <div id="memory-grid" class="memory-grid"></div>
+    </div></section>
+    <section id="learned" class="wrap learned-section" aria-labelledby="learned-title">
+      <div class="section-heading"><div><div class="eyebrow">03 / ΑΠΟ ΤΗ ΣΥΖΗΤΗΣΗ ΣΤΗΝ ΚΑΤΑΝΟΗΣΗ</div><h2 id="learned-title">Τι παίρνουμε μαζί μας.</h2></div><p class="section-description">Αναλυτικές σημειώσεις μελέτης με πηγές, συνδέσεις και ερωτήσεις για σκέψη.</p></div>
+      <div class="learning-intro"><span class="learning-symbol" aria-hidden="true">✳</span><p>Οι σημειώσεις εξηγούν τη συζήτηση. Οι τεχνικές αναφορές των ομιλητών δεν αποτελούν από μόνες τους επιβεβαιωμένες οδηγίες εγκατάστασης ή ισχύοντες κανονισμούς.</p></div>
+      <div id="lesson-list" class="lesson-list"></div>
+    </section>
+    <section id="transcript" class="wrap transcript-section" aria-labelledby="transcript-title">
+      <div class="section-heading"><div><div class="eyebrow">04 / ΤΟ ΠΡΩΤΟΓΕΝΕΣ ΑΡΧΕΙΟ</div><h2 id="transcript-title">Η συζήτηση, σε κείμενο.</h2></div><a class="outline-button" href="./data/transcript.vtt" download>Λήψη μεταγραφής ↗</a></div>
+      <p class="source-note">Αυτόματη μεταγραφή · Χωρίς επιβεβαιωμένη ταυτοποίηση ομιλητών · Πάτησε έναν χρόνο για να ακούσεις.</p>
+      <div class="transcript-toolbar"><label for="chapter-select">Χρονικό κεφάλαιο</label><select id="chapter-select"></select><button id="follow-audio" class="quiet-button" aria-pressed="false">Ακολούθηση ήχου</button></div>
+      <div id="transcript-lines" class="transcript-lines"></div>
+    </section>
+    <div id="load-error" class="wrap" role="alert" hidden>Το αρχείο δεν φορτώθηκε. Έλεγξε τη σύνδεση και <button onclick="location.reload()">δοκίμασε ξανά</button>.</div>
+  </main>
+  <footer class="wrap footer"><a class="brand" href="#">VOICE.</a><p>Η εμπειρία βρίσκει τη θέση της.</p><a href="https://github.com/arisconstantinou/voice">Το αρχείο στο GitHub ↗</a></footer>
+  <aside class="audio-dock" aria-label="Αναπαραγωγή αρχικής ηχογράφησης">
+    <div class="audio-identity"><span class="record-icon" aria-hidden="true">◉</span><div><strong id="now-title">Η συζήτηση</strong><span id="now-subtitle">Electrical · Αυθεντικός ήχος</span></div></div>
+    <audio id="audio" controls preload="none" src="./media/electrical.m4a"></audio>
+    <label class="speed-label"><span class="sr-only">Ταχύτητα αναπαραγωγής</span><select id="speed"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+    <button id="stop-excerpt" class="quiet-button" hidden>Ολόκληρος ήχος</button>
+  </aside>
+  <dialog id="reader"><div class="reader-head"><span class="eyebrow" id="reader-kind"></span><button id="close-reader" class="icon-button" aria-label="Κλείσιμο">×</button></div><div id="reader-content"></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
