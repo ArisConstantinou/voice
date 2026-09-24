@@ -113,7 +113,7 @@ Learning shortcuts were each navigated. Planet buttons orbit around the sun;
 the labelled control freezes and resumes them. The system reduced-motion
 setting also keeps planets still.
 
-`node scripts/browser-qa.cjs` passed **54 local interaction checks** in Chrome,
+`node scripts/browser-qa.cjs` passed **55 local interaction checks** in Chrome,
 including the exact open → play → use timeline → close chain, source privacy
 regression, mobile/tablet overflow, and absence of page errors. All owned
 test-browser processes exited. The inspected comparison captures are stored at

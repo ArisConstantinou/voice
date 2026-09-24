@@ -47,8 +47,9 @@ function ownedProcesses(){
   await page.locator('.result-item [data-action="open"]').first().click();
   check('Search analysis expands within results',await page.locator('#reader').evaluate(e=>e.parentElement.id==='results'&&!e.hidden));
   check('Search result panel pushes the next result',await page.locator('.result-item').nth(1).evaluate((e,before)=>e.getBoundingClientRect().top+scrollY>before+150,secondResultBefore));
-  await page.locator('#close-reader').click();
-
+  await page.locator('#clear-search').click();
+  check('Clearing search closes and preserves the inline reader',await page.locator('#reader').evaluate(e=>e.hidden&&e.isConnected));
+  await page.locator('#search').fill(query);await page.locator('.result-item').first().waitFor();
   await page.locator('#search').fill('__missing_phrase_9317__');
   await page.waitForFunction(()=>document.querySelector('#result-count').textContent.startsWith('0 αποτελέσματα'));
   check('Empty search explains recovery',await page.locator('#results').innerText().then(t=>t.includes('Δοκίμασε')));

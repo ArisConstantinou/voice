@@ -158,7 +158,7 @@ function snippet(record){const text=record.text;if(text.length<330)return text;c
 function search(){
  currentQuery=$('#search').value.trim(); shown=20;
  $('#results-section').hidden=!currentQuery;
- if(!currentQuery){results=[];$('#results').innerHTML='';return;}
+ if(!currentQuery){if(reader.parentElement===$('#results'))closeReader(false);results=[];$('#results').innerHTML='';return;}
  const tokens=norm(currentQuery).split(/\s+/).filter(Boolean);
  results=records.filter(r=>tokens.every(t=>tokenVariants(t).some(v=>r.normalized.includes(v))));
  results.sort((a,b)=>{const score=r=>(r.kind==='transcript'?0:3)+(norm(r.item.title||'').includes(norm(currentQuery))?8:0)+(r.normalized.includes(norm(currentQuery))?2:0);return score(b)-score(a);});
