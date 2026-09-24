@@ -26,7 +26,8 @@ async function metrics(page){return page.evaluate(()=>{
    await page.goto(base,{waitUntil:'networkidle'});await page.locator('.topic-card').first().waitFor();
    const initial=await metrics(page);check(`${name}: search starts at its original location`,!initial.docked&&initial.portaled&&initial.search.top>250);
    for(const y of [600,1300,2100,900]){
-    await page.evaluate(y=>scrollTo(0,y),y);await page.waitForTimeout(120);
+    await page.evaluate(y=>scrollTo({top:y,behavior:'instant'}),y);
+    await page.waitForFunction(y=>Math.abs(scrollY-y)<4&&document.querySelector('.search-area').classList.contains('docked'),y);
     const m=await metrics(page);
     check(`${name}: search docked at ${y}`,m.docked&&Math.abs(m.search.top-m.viewportTop)<2&&m.search.bottom<130);
     check(`${name}: audio dock anchored at ${y}`,Math.abs(m.audioDock.bottom-m.viewportBottom)<2&&m.audio.bottom<=m.viewportBottom&&m.scrollWidth<=390);
@@ -43,7 +44,7 @@ async function metrics(page){return page.evaluate(()=>{
     return {top,bottom,height:innerHeight};
    });
    if(controlled)check(`${name}: bars follow changed visual viewport`,Math.abs(controlled.top-18)<2&&Math.abs(controlled.bottom-(controlled.height-92))<2);
-   await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(150);
+   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForFunction(()=>scrollY===0&&!document.querySelector('.search-area').classList.contains('docked'));
    const returned=await metrics(page);check(`${name}: search returns to hero`,!returned.docked&&returned.search.top>250);
    check(`${name}: no browser errors`,errors.length===0);
   }finally{await browser.close();}

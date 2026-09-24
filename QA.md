@@ -139,12 +139,16 @@ viewport on viewport changes. This addresses the site's fragile scroll path
 and the Safari viewport-offset case, but physical iPhone confirmation remains
 necessary.
 
-`node scripts/mobile-viewport-qa.cjs` passed 32 focused checks across WebKit
-and Chromium iPhone-sized contexts: four scroll positions in each, top and
+`node scripts/mobile-viewport-qa.cjs` passed 32 focused checks on both localhost
+and the published Pages URL across WebKit and Chromium iPhone-sized contexts:
+four scroll positions in each, top and
 bottom anchoring, hit testing of the search and native timeline, simulated
 visual-viewport changes, return to the hero, and no page errors. The existing
-55 interaction checks and `npm test` also passed locally. Captures and the
-focused report are in `output/playwright/mobile-viewport/` locally.
+55 interaction checks passed locally and publicly, and `npm test` passed
+locally and in Pages deployment run 36074841310. Seven public text/data files
+and three public audio ranges matched the commit. Captures and the focused
+report are in `output/playwright/mobile-viewport/` and
+`output/playwright/public-mobile-viewport/` locally.
 On the same emulated mobile Chrome viewport, one controlled 35-step scroll
 measured 37.76 ms TaskDuration before and 33.10 ms after; the corresponding
 script times were 2.62 and 2.46 ms. This is a single comparison, not physical
