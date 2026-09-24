@@ -78,3 +78,18 @@ The original source hash was checked again and remained unchanged.
 - The source drawing and verified speaker identities were not provided.
 
 GitHub Actions and public deployment verification are recorded after publishing.
+
+## Public deployment verification
+
+The first published artifact, commit `2e45d20`, passed all 33 browser checks on
+**https://arisconstantinou.github.io/voice/**, not just localhost. GitHub Actions
+run [36051903722](https://github.com/ArisConstantinou/voice/actions/runs/36051903722)
+succeeded. Seven served text/data hashes matched the committed files; the public
+audio length and three separate 64 KiB HTTP206 ranges matched the redacted file.
+
+Public navigation observation: 1,091 ms, 172,248 transferred resource bytes with
+HTTP compression, 143 ms live-search interaction. No uncaught browser errors;
+all owned browser processes exited. Public evidence is in
+`output/playwright/public/` and `work/public-deployment.json` locally. A final
+mobile-only planet-label spacing adjustment followed this full run; its rendered
+layout and served artifact are checked separately before task completion.

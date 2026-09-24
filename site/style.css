@@ -17,3 +17,4 @@ audio{color-scheme:light}
 @media(min-width:761px) and (max-width:1100px){.universe{display:flex;flex-direction:column;padding-top:40px}.hero-copy{order:0}.hero-copy h1{max-width:none}.hero-copy p{max-width:600px;font-size:16px}.search-area{order:1;margin-top:30px}.galaxy{position:relative;order:2;right:auto;top:auto;width:600px;height:415px;margin:24px auto 0}.orbit-three{width:580px;height:350px}.universe{padding-bottom:26px}}
 .planet-link>span:last-child{white-space:nowrap}
 @media(max-width:760px){.galaxy-coordinate{display:none}}
+@media(max-width:760px){#planets .planet-link:nth-child(6){left:61%!important}}
