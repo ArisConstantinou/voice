@@ -57,3 +57,6 @@ html{scroll-padding-top:90px}
   .reader-panel .reader-head{margin-bottom:18px}
 }
 @media(max-width:380px){.search-shortcuts a,.search-area.docked .search-shortcuts a{width:36px;min-width:36px}}
+.search-area.portaled:not(.docked){position:absolute;left:50%;transform:translateX(-50%);margin:0;z-index:5}
+.search-area.docked{top:var(--visual-top-gap,0px);background:#111624;backdrop-filter:none}
+.audio-dock{bottom:var(--visual-bottom-gap,0px);background:#171c2b;backdrop-filter:none}

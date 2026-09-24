@@ -9,23 +9,62 @@ const aliases = [['rcd','ρελε','ρελέ'],['rcbo','αρσιμπο'],['πρ�
 const searchHome = $('#search-home');
 const searchArea = $('.search-area');
 let docked = false;
+let searchPortaled = false;
+let searchGap = 0;
+function positionSearchAtHome(){
+  if(!searchPortaled || docked) return;
+  searchArea.style.top = `${searchHome.getBoundingClientRect().top + scrollY + searchGap}px`;
+}
+function portalSearch(){
+  if(searchPortaled) return;
+  searchGap = parseFloat(getComputedStyle(searchArea).marginTop) || 0;
+  searchHome.style.height = `${searchHome.getBoundingClientRect().height}px`;
+  document.body.append(searchArea);
+  searchArea.classList.add('portaled');
+  searchPortaled = true;
+  positionSearchAtHome();
+  if(window.ResizeObserver) new ResizeObserver(()=>{
+    if(docked) return;
+    searchHome.style.height = `${searchGap + searchArea.getBoundingClientRect().height}px`;
+    positionSearchAtHome();
+  }).observe(searchArea);
+}
+function syncViewportAnchors(){
+  const viewport = window.visualViewport;
+  const top = viewport?.offsetTop || 0;
+  const bottom = viewport ? innerHeight - viewport.offsetTop - viewport.height : 0;
+  document.documentElement.style.setProperty('--visual-top-gap', `${Math.round(top)}px`);
+  document.documentElement.style.setProperty('--visual-bottom-gap', `${Math.round(bottom)}px`);
+}
 function updateSearchDock(){
+  portalSearch();
   const shouldDock = searchHome.getBoundingClientRect().top < 0;
-  if(shouldDock === docked) return;
+  if(shouldDock === docked) return positionSearchAtHome();
   docked = shouldDock;
   if(docked){
-    searchHome.style.height = `${searchHome.getBoundingClientRect().height}px`;
-    document.body.append(searchArea);
+    searchArea.style.top = '';
     searchArea.classList.add('docked');
   }else{
     searchArea.classList.remove('docked');
-    searchHome.append(searchArea);
-    searchHome.style.height = '';
+    positionSearchAtHome();
   }
 }
 window.addEventListener('scroll',updateSearchDock,{passive:true});
-window.addEventListener('resize',updateSearchDock);
-requestAnimationFrame(updateSearchDock);
+let lastViewportWidth = innerWidth;
+window.addEventListener('resize',()=>{
+  if(innerWidth !== lastViewportWidth && searchPortaled){
+    lastViewportWidth = innerWidth;
+    const wasDocked = docked;
+    searchArea.classList.remove('docked');
+    searchHome.style.height = `${searchGap + searchArea.getBoundingClientRect().height}px`;
+    if(wasDocked) searchArea.classList.add('docked');
+  }
+  syncViewportAnchors();updateSearchDock();
+});
+window.visualViewport?.addEventListener('resize',syncViewportAnchors);
+window.visualViewport?.addEventListener('scroll',()=>{syncViewportAnchors();updateSearchDock();});
+window.addEventListener('pageshow',()=>{syncViewportAnchors();updateSearchDock();});
+requestAnimationFrame(()=>{syncViewportAnchors();updateSearchDock();});
 function toast(text){ $('#toast').textContent = text; $('#toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(()=>$('#toast').hidden = true,5000); }
 function stopSpeech(){ speechToken++; window.speechSynthesis?.cancel(); }
 function speak(text){

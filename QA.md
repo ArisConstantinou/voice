@@ -126,3 +126,26 @@ These are individual desktop measurements, not phone performance evidence or
 a claim of zero rendering cost. The final local run showed a 16.8 ms p95
 animation-frame interval on this 60 Hz headless browser. Physical-device and
 real-microphone limitations above still apply.
+
+## iPhone scrolling repair — 25 September 2026
+
+The user's physical-phone screenshot showed the search bar absent during scroll
+and the audio dock painted above the bottom edge. The older local WebKit
+emulation did not reproduce that compositor failure, so this is not recorded
+as a confirmed local reproduction. The search element now moves to the body
+once on load instead of being reparented during scrolling; fixed bars use
+opaque backgrounds without backdrop blur. Both bars are aligned to the visible
+viewport on viewport changes. This addresses the site's fragile scroll path
+and the Safari viewport-offset case, but physical iPhone confirmation remains
+necessary.
+
+`node scripts/mobile-viewport-qa.cjs` passed 32 focused checks across WebKit
+and Chromium iPhone-sized contexts: four scroll positions in each, top and
+bottom anchoring, hit testing of the search and native timeline, simulated
+visual-viewport changes, return to the hero, and no page errors. The existing
+55 interaction checks and `npm test` also passed locally. Captures and the
+focused report are in `output/playwright/mobile-viewport/` locally.
+On the same emulated mobile Chrome viewport, one controlled 35-step scroll
+measured 37.76 ms TaskDuration before and 33.10 ms after; the corresponding
+script times were 2.62 and 2.46 ms. This is a single comparison, not physical
+phone performance evidence.
