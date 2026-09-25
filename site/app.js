@@ -127,8 +127,8 @@ $('#player-toggle').addEventListener('click',async()=>{
   if(!audio.paused){audio.pause();return;}
   try{await audio.play();}catch{toast('Δεν ήταν δυνατή η αναπαραγωγή. Έλεγξε τη σύνδεση.');}
 });
-$('#player-back').addEventListener('click',()=>{audio.currentTime=Math.max(0,audio.currentTime-15);});
-$('#player-forward').addEventListener('click',()=>{const end=Number.isFinite(audio.duration)?audio.duration:audio.currentTime+15;audio.currentTime=Math.min(end,audio.currentTime+15);});
+$('#player-back').addEventListener('click',()=>{audio.currentTime=Math.max(0,audio.currentTime-10);});
+$('#player-forward').addEventListener('click',()=>{const end=Number.isFinite(audio.duration)?audio.duration:audio.currentTime+10;audio.currentTime=Math.min(end,audio.currentTime+10);});
 $('#player-mute').addEventListener('click',()=>{audio.muted=!audio.muted;});
 $('#player-seek').addEventListener('input',e=>{const position=Number(e.target.value);$('#player-current').textContent=time(position);e.target.setAttribute('aria-valuetext',time(position));e.target.style.setProperty('--seek-progress',`${100*position/Number(e.target.max)}%`);});
 $('#player-seek').addEventListener('change',e=>{audio.currentTime=Number(e.target.value);syncMobilePlayer();});

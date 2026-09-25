@@ -64,8 +64,9 @@ It is a deterministic, curated reader, not a live generative AI service. Search
 cannot recover words that automatic recognition missed; the source audio remains
 available. Codes and ambiguous units are not silently invented or normalized.
 
-The recording loads on demand. Native controls support seek, pause and volume;
-additional controls offer excerpt playback and speed. Synthetic reading is
+The recording loads on demand. Desktop uses native audio controls. Mobile has a
+wide timeline with centered playback and 10-second skips, plus mute and speed.
+Story excerpts play through the same controls. Synthetic reading is
 explicitly labelled and uses device voices, without imitating the speaker.
 A Greek voice must be available on the device for appropriate pronunciation.
 

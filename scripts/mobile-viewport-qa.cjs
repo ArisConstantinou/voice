@@ -26,6 +26,9 @@ async function metrics(page){return page.evaluate(()=>{
    await page.goto(base,{waitUntil:'networkidle'});await page.locator('.topic-card').first().waitFor();
    const initial=await metrics(page);check(`${name}: search starts at its original location`,!initial.docked&&initial.portaled&&initial.search.top>250);
    check(`${name}: mobile player and story button have full touch targets`,await page.evaluate(()=>['#player-toggle','#player-back','#player-forward','#player-mute','#player-seek','#speed','.memory-card .story-play'].every(selector=>document.querySelector(selector).getBoundingClientRect().height>=44)));
+   check(`${name}: mute and speed share the compact header`,await page.evaluate(()=>{const mute=document.querySelector('#player-mute').getBoundingClientRect(),speed=document.querySelector('#speed').getBoundingClientRect(),timeline=document.querySelector('.mobile-player-timeline').getBoundingClientRect(),dock=document.querySelector('.audio-dock').getBoundingClientRect();return Math.abs((mute.top+mute.bottom)/2-(speed.top+speed.bottom)/2)<2&&mute.bottom<timeline.top&&dock.height<=200;}));
+   check(`${name}: transport is centered below timeline`,await page.evaluate(()=>{const timeline=document.querySelector('.mobile-player-timeline').getBoundingClientRect(),actions=document.querySelector('.mobile-player-actions').getBoundingClientRect(),toggle=document.querySelector('#player-toggle').getBoundingClientRect();return actions.top>=timeline.bottom-1&&Math.abs((toggle.left+toggle.right)/2-(timeline.left+timeline.right)/2)<2;}));
+   check(`${name}: skip controls show ten seconds`,await page.evaluate(()=>['#player-back','#player-forward'].every(selector=>{const button=document.querySelector(selector);return button.textContent.includes('10')&&button.getAttribute('aria-label').includes('10');})));
    for(const y of [600,1300,2100,900]){
     await page.evaluate(y=>scrollTo({top:y,behavior:'instant'}),y);
     await page.waitForFunction(y=>Math.abs(scrollY-y)<4&&document.querySelector('.search-area').classList.contains('docked'),y);
@@ -63,10 +66,13 @@ async function metrics(page){return page.evaluate(()=>{
    await page.waitForFunction(()=>!document.querySelector('#audio').paused);
    check(`${name}: large play control resumes`,true);
    await page.locator('#audio').evaluate(e=>e.currentTime=6808);
+   const beforeSkip=await page.locator('#audio').evaluate(e=>e.currentTime);
    await page.locator('#player-back').click();
-   check(`${name}: back control seeks 15 seconds`,await page.locator('#audio').evaluate(e=>e.currentTime<6795));
+   const afterBack=await page.locator('#audio').evaluate(e=>e.currentTime);
+   check(`${name}: back control seeks 10 seconds`,Math.abs(beforeSkip-afterBack-10)<1);
    await page.locator('#player-forward').click();
-   check(`${name}: forward control seeks 15 seconds`,await page.locator('#audio').evaluate(e=>e.currentTime>6806));
+   const afterForward=await page.locator('#audio').evaluate(e=>e.currentTime);
+   check(`${name}: forward control seeks 10 seconds`,Math.abs(afterForward-afterBack-10)<1);
    await page.locator('#stop-excerpt').click();
    check(`${name}: full audio restores from excerpt`,await page.locator('#stop-excerpt').evaluate(e=>e.hidden));
    await page.locator('#player-seek').evaluate(e=>{e.value=String(Number(e.max)/2);e.dispatchEvent(new Event('change',{bubbles:true}));});
@@ -75,7 +81,7 @@ async function metrics(page){return page.evaluate(()=>{
    check(`${name}: speed selector updates playback`,await page.locator('#audio').evaluate(e=>e.playbackRate===1.5));
    await page.screenshot({path:path.join(out,`${name}-player.png`)});
    await page.setViewportSize({width:320,height:700});
-   check(`${name}: narrow phone controls do not overlap`,await page.evaluate(()=>{const forward=document.querySelector('#player-forward').getBoundingClientRect(),mute=document.querySelector('#player-mute').getBoundingClientRect();return document.documentElement.scrollWidth<=320&&forward.right+4<=mute.left;}));
+   check(`${name}: narrow phone transport stays centered without overlap`,await page.evaluate(()=>{const rect=id=>document.querySelector(id).getBoundingClientRect(),back=rect('#player-back'),toggle=rect('#player-toggle'),forward=rect('#player-forward'),timeline=rect('.mobile-player-timeline'),actions=rect('.mobile-player-actions'),mute=rect('#player-mute'),speed=rect('.speed-label');return document.documentElement.scrollWidth<=320&&actions.top>=timeline.bottom-1&&Math.abs((toggle.left+toggle.right)/2-(timeline.left+timeline.right)/2)<2&&back.right<toggle.left&&toggle.right<forward.left&&mute.right<speed.left;}));
    check(`${name}: no browser errors`,errors.length===0);
   }finally{await browser.close();}
  }
