@@ -81,6 +81,19 @@
   <aside class="audio-dock" aria-label="Αναπαραγωγή αρχικής ηχογράφησης">
     <div class="audio-identity"><span class="record-icon" aria-hidden="true">◉</span><div><strong id="now-title">Η συζήτηση</strong><span id="now-subtitle">Electrical · Αυθεντικός ήχος</span></div></div>
     <audio id="audio" controls preload="none" src="./media/electrical.m4a"></audio>
+    <div class="mobile-player" aria-label="Χειριστήρια ήχου">
+      <div class="mobile-player-timeline">
+        <span id="player-current">0:00</span>
+        <input id="player-seek" type="range" min="0" max="1" step="0.1" value="0" disabled aria-label="Μετακίνηση στην ηχογράφηση">
+        <span id="player-duration">--:--</span>
+      </div>
+      <div class="mobile-player-actions">
+        <button id="player-back" type="button" aria-label="Πίσω 15 δευτερόλεπτα">↶<small>15</small></button>
+        <button id="player-toggle" type="button" aria-label="Αναπαραγωγή" aria-pressed="false">▶</button>
+        <button id="player-forward" type="button" aria-label="Μπροστά 15 δευτερόλεπτα">↷<small>15</small></button>
+        <button id="player-mute" type="button" aria-label="Σίγαση" aria-pressed="false">🔊</button>
+      </div>
+    </div>
     <label class="speed-label"><span class="sr-only">Ταχύτητα αναπαραγωγής</span><select id="speed"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
     <button id="stop-excerpt" class="quiet-button" hidden>Ολόκληρος ήχος</button>
   </aside>

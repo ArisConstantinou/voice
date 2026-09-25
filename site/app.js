@@ -100,6 +100,39 @@ audio.addEventListener('timeupdate',()=>{
   if(follow && line){const box=$('#transcript-lines');box.scrollTop=line.offsetTop-box.offsetTop-box.clientHeight/3;}
 });
 audio.addEventListener('seeking',()=>{if(excerpt&&(audio.currentTime<excerpt.start-.5||audio.currentTime>excerpt.end+.5)){excerpt=null;$('#stop-excerpt').hidden=true;$('#now-subtitle').textContent='Electrical · Αυθεντικός ήχος';}});
+function syncMobilePlayer(){
+  const duration=Number.isFinite(audio.duration)?audio.duration:0;
+  const seek=$('#player-seek');
+  seek.disabled=!duration;
+  seek.max=String(duration||1);
+  if(!seek.matches(':active')){
+    seek.value=String(Math.min(audio.currentTime||0,duration||1));
+    $('#player-current').textContent=time(audio.currentTime||0);
+    seek.setAttribute('aria-valuetext',time(audio.currentTime||0));
+    seek.style.setProperty('--seek-progress',`${duration?100*(audio.currentTime||0)/duration:0}%`);
+  }
+  $('#player-duration').textContent=duration?time(duration):'--:--';
+  const playing=!audio.paused;
+  const toggle=$('#player-toggle');
+  toggle.textContent=playing?'Ⅱ':'▶';
+  toggle.setAttribute('aria-label',playing?'Παύση':'Αναπαραγωγή');
+  toggle.setAttribute('aria-pressed',String(playing));
+  const mute=$('#player-mute');
+  mute.textContent=audio.muted?'🔇':'🔊';
+  mute.setAttribute('aria-label',audio.muted?'Ενεργοποίηση ήχου':'Σίγαση');
+  mute.setAttribute('aria-pressed',String(audio.muted));
+}
+for(const event of ['loadedmetadata','durationchange','timeupdate','play','pause','ended','seeking','volumechange']) audio.addEventListener(event,syncMobilePlayer);
+$('#player-toggle').addEventListener('click',async()=>{
+  if(!audio.paused){audio.pause();return;}
+  try{await audio.play();}catch{toast('Δεν ήταν δυνατή η αναπαραγωγή. Έλεγξε τη σύνδεση.');}
+});
+$('#player-back').addEventListener('click',()=>{audio.currentTime=Math.max(0,audio.currentTime-15);});
+$('#player-forward').addEventListener('click',()=>{const end=Number.isFinite(audio.duration)?audio.duration:audio.currentTime+15;audio.currentTime=Math.min(end,audio.currentTime+15);});
+$('#player-mute').addEventListener('click',()=>{audio.muted=!audio.muted;});
+$('#player-seek').addEventListener('input',e=>{const position=Number(e.target.value);$('#player-current').textContent=time(position);e.target.setAttribute('aria-valuetext',time(position));e.target.style.setProperty('--seek-progress',`${100*position/Number(e.target.max)}%`);});
+$('#player-seek').addEventListener('change',e=>{audio.currentTime=Number(e.target.value);syncMobilePlayer();});
+syncMobilePlayer();
 $('#speed').addEventListener('change',e=>audio.playbackRate=Number(e.target.value));
 $('#stop-excerpt').addEventListener('click',()=>{excerpt=null;$('#stop-excerpt').hidden=true;$('#now-subtitle').textContent='Electrical · Αυθεντικός ήχος';});
 $('#follow-audio').addEventListener('click',e=>{follow=!follow;e.currentTarget.setAttribute('aria-pressed',String(follow));if(follow){currentChapter=Math.floor(audio.currentTime/600);$('#chapter-select').value=currentChapter;renderTranscript();}});
@@ -173,7 +206,7 @@ function renderArchive(){
  $('#archive-stats').textContent=`${archive.topics.length} θεματικοί κόσμοι · ${archive.memories.length} αναμνήσεις · 2ω 04λ ήχου`;
  $('#suggestions').innerHTML=archive.suggestions.map(s=>`<button data-query="${esc(s)}">${esc(s)} ↗</button>`).join('');
  renderTopics();
- $('#memory-grid').innerHTML=archive.memories.map((m,i)=>`<article class="memory-card"><span class="memory-label">ΑΣΤΕΡΙ ${String(i+1).padStart(2,'0')} · ${time(m.start)}</span><span class="memory-star" aria-hidden="true">${i%2?'✧':'✦'}</span><h3>${esc(m.title)}</h3><p>${esc(m.summary)}</p>${waveformSvg(m.start,m.end)}<div class="card-bottom"><button data-action="play" data-start="${m.start}" data-end="${m.end}" data-title="${esc(m.title)}">▷ Άκου την ιστορία · ${time(m.end-m.start)}</button><button data-action="open" data-kind="memory" data-id="${m.id}">Διάβασε ↗</button></div></article>`).join('');
+ $('#memory-grid').innerHTML=archive.memories.map((m,i)=>`<article class="memory-card"><span class="memory-label">ΑΣΤΕΡΙ ${String(i+1).padStart(2,'0')} · ${time(m.start)}</span><span class="memory-star" aria-hidden="true">${i%2?'✧':'✦'}</span><h3>${esc(m.title)}</h3><p>${esc(m.summary)}</p>${waveformSvg(m.start,m.end)}<div class="card-bottom"><button class="story-play" data-action="play" data-start="${m.start}" data-end="${m.end}" data-title="${esc(m.title)}"><span aria-hidden="true">▶</span> Άκου την ιστορία <span class="story-duration">${time(m.end-m.start)}</span></button><button class="story-read" data-action="open" data-kind="memory" data-id="${m.id}">Διάβασε ↗</button></div></article>`).join('');
  $('#lesson-list').innerHTML=archive.lessons.map((l,i)=>`<details class="lesson" id="lesson-${l.id}"><summary><span class="lesson-number">${String(i+1).padStart(2,'0')}</span>${esc(l.title)}</summary><div class="lesson-body">${paragraphs(l.body)}<h4>Τι κρατάμε</h4><ul>${l.takeaways.map(t=>`<li>${esc(t)}</li>`).join('')}</ul><h4>Σκέψου το στην πράξη</h4><p>${esc(l.question)}</p><h4>Σύνδεση με τη συζήτηση</h4><div class="reader-refs">${refs(l.ranges)}</div>${sourceLinks(l.sources)}<div class="lesson-actions"><button class="outline-button" data-action="speak" data-kind="lesson" data-id="${l.id}">◖ Συνθετική ανάγνωση</button><button class="quiet-button" data-action="stop-speech">Διακοπή ανάγνωσης</button></div></div></details>`).join('');
  $('#chapter-select').innerHTML=Array.from({length:Math.ceil(transcript.duration/600)},(_,i)=>`<option value="${i}">${time(i*600)} – ${time(Math.min((i+1)*600,transcript.duration))}</option>`).join('');
  renderTranscript();
